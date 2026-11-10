@@ -1,6 +1,10 @@
 # Studio Bus Comp
 
-Studio Bus Comp is a stereo bus compressor VST3 plug-in built with JUCE.
+Studio Bus Comp is a stereo bus compressor built with JUCE. It is available as both a VST3 plug-in for DAWs and a standalone Windows application.
+
+## Run the standalone app
+
+Download `StudioBusComp.exe` from the [latest GitHub release](https://github.com/joe-calih/API-2/releases/latest) and run it. Connect an audio device when prompted.
 
 ## Install
 
@@ -17,7 +21,7 @@ cmake -S . -B build -A x64
 cmake --build build --config Release --parallel
 ```
 
-The VST3 bundle is generated at `build/StudioBusComp_artefacts/Release/VST3/Studio Bus Comp.vst3`.
+The VST3 bundle is generated at `build/StudioBusComp_artefacts/Release/VST3/Studio Bus Comp.vst3`. The standalone executable is generated at `build/StudioBusComp_artefacts/Release/Standalone/Studio Bus Comp.exe`.
 
 ## Downloads
 

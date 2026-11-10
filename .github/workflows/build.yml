@@ -1,4 +1,4 @@
-name: Build Windows VST3
+name: Build Windows VST3 and Standalone
 on: [push, workflow_dispatch]
 permissions:
   contents: write
@@ -17,10 +17,12 @@ jobs:
           New-Item -ItemType Directory -Force dist | Out-Null
           Copy-Item "build/StudioBusComp_artefacts/Release/VST3/Studio Bus Comp.vst3" dist/ -Recurse
           Copy-Item Install-Windows.bat dist/
+          Copy-Item "build/StudioBusComp_artefacts/Release/Standalone/Studio Bus Comp.exe" "dist/StudioBusComp.exe"
           Compress-Archive -Path "dist/Studio Bus Comp.vst3", "dist/Install-Windows.bat" -DestinationPath "dist/StudioBusComp-Windows-VST3.zip"
+          if (-not (Test-Path "dist/StudioBusComp.exe")) { throw "Standalone executable was not built." }
       - uses: actions/upload-artifact@v4
         with:
-          name: StudioBusComp-Windows-VST3
+          name: StudioBusComp-Windows
           path: dist
       - name: Publish GitHub release
         if: startsWith(github.ref, 'refs/tags/')
@@ -28,4 +30,6 @@ jobs:
         with:
           name: Studio Bus Comp ${{ github.ref_name }}
           generate_release_notes: true
-          files: dist/StudioBusComp-Windows-VST3.zip
+          files: |
+            dist/StudioBusComp.exe
+            dist/StudioBusComp-Windows-VST3.zip
