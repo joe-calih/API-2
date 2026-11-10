@@ -193,11 +193,14 @@ void SbcEditor::askSaveName()
     saveWindow->addTextEditor ("name", proc.getCurrentPresetName());
     saveWindow->addButton ("Save", 1, KeyPress (KeyPress::returnKey));
     saveWindow->addButton ("Cancel", 0, KeyPress (KeyPress::escapeKey));
-    saveWindow->enterModalState (true, ModalCallbackFunction::create ([this] (int r)
+    saveWindow->enterModalState (true, ModalCallbackFunction::create (
+        [safe = Component::SafePointer<SbcEditor> (this)] (int r)
     {
-        if (r == 1 && saveWindow != nullptr)
-            proc.saveUserPreset (saveWindow->getTextEditorContents ("name"));
-        MessageManager::callAsync ([safe = Component::SafePointer<SbcEditor> (this)]
-                                  { if (safe != nullptr) safe->saveWindow.reset(); });
+        if (safe != nullptr)
+        {
+            if (r == 1 && safe->saveWindow != nullptr)
+                safe->proc.saveUserPreset (safe->saveWindow->getTextEditorContents ("name"));
+            MessageManager::callAsync ([safe] { if (safe != nullptr) safe->saveWindow.reset(); });
+        }
     }), false);
 }
